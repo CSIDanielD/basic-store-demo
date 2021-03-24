@@ -1,8 +1,8 @@
-export interface Task {
+export interface UserTask {
   taskId: number;
   name: string;
   difficulty?: number;
   progress?: number;
 }
 
-export default Task;
+export default UserTask;

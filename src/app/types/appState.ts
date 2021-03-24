@@ -1,8 +1,8 @@
 import Note from "./note";
-import Task from "./task";
+import UserTask from "./userTask";
 
 export interface AppState {
-  tasks: Task[];
+  tasks: UserTask[];
   notes: Note[];
 }
 

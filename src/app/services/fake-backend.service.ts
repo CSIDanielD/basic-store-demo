@@ -1,12 +1,14 @@
 import { Injectable } from "@angular/core";
 import { asyncScheduler, BehaviorSubject, Observable, scheduled } from "rxjs";
 import AppState from "../types/appState";
-import Task from "../types/task";
+import UserTask from "../types/userTask";
 import Note from "../types/note";
 import { delay, map, take } from "rxjs/operators";
 
 @Injectable({ providedIn: "root" })
 export class FakeBackendService {
+  private globalDelay = 500;
+
   private _fakeDatabase = new BehaviorSubject<AppState>({
     tasks: [
       {
@@ -73,17 +75,20 @@ export class FakeBackendService {
     const obs = this._fakeDatabase.asObservable().pipe(map((v, i) => v.tasks));
 
     // Delay the value by 100 ms
-    return this.toDelayedSingleEmitter(obs, 100);
+    return this.toDelayedSingleEmitter(obs, this.globalDelay);
   }
 
-  addTask(task: Task) {
+  addTask(task: UserTask) {
     const newTask = { ...task, taskId: this.nextId() };
     const newData = { ...this._fakeDatabase.value };
     [...newData.tasks].push(newTask);
 
     this._fakeDatabase.next(newData);
 
-    return this.toDelayedSingleEmitter(scheduled([true], asyncScheduler), 100);
+    return this.toDelayedSingleEmitter(
+      scheduled([true], asyncScheduler),
+      this.globalDelay
+    );
   }
 
   removeTask(taskId: number) {
@@ -94,19 +99,22 @@ export class FakeBackendService {
     if (taskIndex < 0) {
       return this.toDelayedSingleEmitter(
         scheduled([false], asyncScheduler),
-        100
+        this.globalDelay
       );
     }
 
     newTasks.splice(taskIndex, 1);
-    return this.toDelayedSingleEmitter(scheduled([true], asyncScheduler), 100);
+    return this.toDelayedSingleEmitter(
+      scheduled([true], asyncScheduler),
+      this.globalDelay
+    );
   }
 
   getNotes() {
     const obs = this._fakeDatabase.asObservable().pipe(map((v, i) => v.notes));
 
     // Delay the value by 100 ms
-    return this.toDelayedSingleEmitter(obs, 100);
+    return this.toDelayedSingleEmitter(obs, this.globalDelay);
   }
 
   addNote(note: Note) {
@@ -115,7 +123,10 @@ export class FakeBackendService {
     [...newData.notes].push(newNote);
 
     this._fakeDatabase.next(newData);
-    return this.toDelayedSingleEmitter(scheduled([true], asyncScheduler), 100);
+    return this.toDelayedSingleEmitter(
+      scheduled([true], asyncScheduler),
+      this.globalDelay
+    );
   }
 
   removeNote(noteId: number) {
@@ -126,11 +137,14 @@ export class FakeBackendService {
     if (noteIndex < 0) {
       return this.toDelayedSingleEmitter(
         scheduled([false], asyncScheduler),
-        100
+        this.globalDelay
       );
     }
 
     newNotes.splice(noteIndex, 1);
-    return this.toDelayedSingleEmitter(scheduled([true], asyncScheduler), 100);
+    return this.toDelayedSingleEmitter(
+      scheduled([true], asyncScheduler),
+      this.globalDelay
+    );
   }
 }

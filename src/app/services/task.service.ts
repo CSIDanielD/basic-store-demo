@@ -1,18 +1,25 @@
-import { Injectable } from "@angular/core";
-import { asyncScheduler, scheduled } from "rxjs";
-import { delay } from "rxjs/operators";
+import { Injectable, OnInit } from "@angular/core";
 import { FakeBackendService } from "./fake-backend.service";
 import { StoreService } from "./store.service";
+import Note from "../types/note";
+import UserTask from "../types/userTask";
 
 @Injectable({ providedIn: "root" })
-export class TaskService {
+export class TaskService implements OnInit {
   constructor(
-    public store: StoreService,
-    public fakeBackend: FakeBackendService
-  ) {}
+    private store: StoreService,
+    private fakeBackend: FakeBackendService
+  ) {
+    this.store.registerAction<UserTask[]>("getTasks", (s, tasks) => {
+      s.tasks = tasks;
+      return s;
+    });
+  }
 
   async getTasks() {
     const tasks = await this.fakeBackend.getTasks().toPromise();
-    console.log("Tasks:", tasks);
+    this.store.dispatchAction("getTasks", tasks);
   }
+
+  ngOnInit() {}
 }
