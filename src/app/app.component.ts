@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { map } from "rxjs/operators";
+import { NoteService } from "./services/note.service";
 import { StoreService } from "./services/store.service";
 import { TaskService } from "./services/task.service";
 
@@ -9,7 +10,11 @@ import { TaskService } from "./services/task.service";
   styleUrls: ["./app.component.css"]
 })
 export class AppComponent implements OnInit {
-  constructor(public store: StoreService, public taskService: TaskService) {}
+  constructor(
+    public store: StoreService,
+    public taskService: TaskService,
+    public noteService: NoteService
+  ) {}
 
   get tasks$() {
     return this.store.appState.pipe(map((v, i) => v.tasks));
@@ -24,7 +29,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.store.dispatchAction("getTasks"); // Async, will update state second.
-    // this.store.dispatchAction("makeFakeTasks"); // Synchronous, will update state first.
+    this.store.dispatchAction("getTasks"); // Async, will update state second.
+    this.store.dispatchAction("makeFakeTasks"); // Synchronous, will update state first.
+    // this.store.dispatchAction("getNotes");
   }
 }
