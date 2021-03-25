@@ -4,7 +4,7 @@ import { StoreService } from "./store.service";
 import UserTask from "../types/userTask";
 
 @Injectable({ providedIn: "root" })
-export class TaskService implements OnInit {
+export class TaskService {
   constructor(
     private store: StoreService,
     private fakeBackend: FakeBackendService
@@ -12,6 +12,15 @@ export class TaskService implements OnInit {
     this.store.registerAction<UserTask[]>("getTasks", async s => {
       const tasks = await this.fakeBackend.getTasks().toPromise();
       s.tasks = tasks;
+      return s;
+    });
+
+    this.store.registerAction("makeFakeTasks", s => {
+      s.tasks = [
+        { taskId: 1, name: "Fake Task 1", difficulty: 20, progress: 0.4 },
+        { taskId: 1, name: "Fake Task 2", difficulty: 3, progress: 0.9 }
+      ];
+
       return s;
     });
 
@@ -32,6 +41,4 @@ export class TaskService implements OnInit {
 
     this.store.registerAction("removeTask");
   }
-
-  ngOnInit() {}
 }

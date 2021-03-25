@@ -19,7 +19,14 @@ export class AppComponent implements OnInit {
     return this.store.appState.pipe(map((v, i) => v.notes));
   }
 
+  get updateCount() {
+    return this.store.stateUpdateCount;
+  }
+
   ngOnInit() {
-    this.store.dispatchAction("getTasks");
+    this.store.dispatchAction("makeFakeTasks");
+    setTimeout(() => {
+      this.store.dispatchAction("getTasks");
+    }, 1000);
   }
 }

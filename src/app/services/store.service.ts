@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { asapScheduler, BehaviorSubject, scheduled, Subject } from "rxjs";
+import { skip } from "rxjs/operators";
 import AppState from "../types/appState";
 import ActionReducer from "../types/basic-store/actionReducer";
 
@@ -16,6 +17,8 @@ export class StoreService {
 
   private _dispatch = new Subject<{ action: string; args: any }>();
 
+  private _stateUpdateCount = new BehaviorSubject<number>(0);
+
   public get appState() {
     return this._appState.asObservable();
   }
@@ -30,6 +33,10 @@ export class StoreService {
 
   public get reducerChanges() {
     return this._actionReducers.asObservable();
+  }
+
+  public get stateUpdateCount() {
+    return this._stateUpdateCount.value;
   }
 
   select<T>(selector: (state: AppState) => T) {
@@ -81,6 +88,10 @@ export class StoreService {
   constructor() {
     this._dispatch.subscribe(action => {
       this._commitAction(action.action, action.args);
+    });
+
+    this._appState.pipe(skip(1)).subscribe(s => {
+      this._stateUpdateCount.next(this.stateUpdateCount + 1);
     });
   }
 }
