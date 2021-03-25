@@ -4,6 +4,8 @@ import { skip } from "rxjs/operators";
 import AppState from "../types/appState";
 import ActionReducer from "../types/basic-store/actionReducer";
 
+// TODO: Make StoreService extend BasicStore, simplify if it.
+
 @Injectable({ providedIn: "root" })
 export class StoreService {
   private _appState = new BehaviorSubject<AppState>({
