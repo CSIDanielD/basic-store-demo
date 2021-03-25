@@ -91,6 +91,27 @@ export class FakeBackendService {
     );
   }
 
+  updateTask(task: UserTask) {
+    const newData = { ...this._fakeDatabase.value };
+    const newTasks = [...newData.tasks];
+
+    const taskIndex = newTasks.findIndex(t => t.taskId === task?.taskId);
+    if (taskIndex < 0) {
+      return this.toDelayedSingleEmitter(
+        scheduled([false], asyncScheduler),
+        this.globalDelay
+      );
+    }
+
+    const newTask = newTasks[taskIndex];
+    newTasks.splice(taskIndex, 1, newTask);
+    
+    return this.toDelayedSingleEmitter(
+      scheduled([true], asyncScheduler),
+      this.globalDelay
+    );
+  }
+
   removeTask(taskId: number) {
     const newData = { ...this._fakeDatabase.value };
     const newTasks = [...newData.tasks];
@@ -123,6 +144,27 @@ export class FakeBackendService {
     [...newData.notes].push(newNote);
 
     this._fakeDatabase.next(newData);
+    return this.toDelayedSingleEmitter(
+      scheduled([true], asyncScheduler),
+      this.globalDelay
+    );
+  }
+
+  updateNote(note: Note) {
+    const newData = { ...this._fakeDatabase.value };
+    const newNotes = [...newData.notes];
+
+    const noteIndex = newNotes.findIndex(n => n.noteId === note?.noteId);
+    if (noteIndex < 0) {
+      return this.toDelayedSingleEmitter(
+        scheduled([false], asyncScheduler),
+        this.globalDelay
+      );
+    }
+
+    const newNote = newNotes[noteIndex];
+    newNotes.splice(noteIndex, 1, newNote);
+    
     return this.toDelayedSingleEmitter(
       scheduled([true], asyncScheduler),
       this.globalDelay

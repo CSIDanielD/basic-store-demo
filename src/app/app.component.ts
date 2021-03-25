@@ -20,6 +20,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.taskService.getTasks();
+    this.store.dispatchAction("getTasks");
   }
 }

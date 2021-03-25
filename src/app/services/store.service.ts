@@ -40,31 +40,39 @@ export class StoreService {
   // then they can just do selectedState = newValue, and we automatically handle the object
   // immutability aspect behind the scenes.
 
-  registerAction<P>(
+  registerAction<P = any>(
     action: string,
-    actionReducer: ActionReducer<AppState, P>,
+    actionReducer?: ActionReducer<AppState, P>,
     replaceExisting?: boolean
   ) {
-    if (replaceExisting && this._actionReducers.value[action]) {
+    if (!replaceExisting && this._actionReducers.value[action]) {
       throw new Error(`Already registered reducer for action ${action}!`);
     }
 
-    this._actionReducers.value[action] = actionReducer;
+    this._actionReducers.value[action] =
+      actionReducer ||
+      function(s) {
+        return s;
+      };
   }
 
-  dispatchAction<P>(action: string, args: P) {
+  dispatchAction<P = any>(action: string, args?: P) {
     this._dispatch.next({ action: action, args: args });
   }
 
   /** Update the store's state according to the given action's registered reducer.  */
-  private _commitAction<P>(action: string, args: P) {
+  private async _commitAction<P>(action: string, args: P) {
     const reducer = this._actionReducers.value[action];
     if (!reducer) {
-      console.log("Reducers are:", { ...this._actionReducers.value }, reducer);
       throw new Error(`No reducer for action '${action}'!`);
     }
 
-    const newState = reducer({ ...this._appState.value }, args);
+    const evaluatedState = new Promise<AppState>((resolve, reject) => {
+      return resolve(reducer({ ...this._appState.value }, args));
+    });
+
+    const newState = await evaluatedState;
+
     this._appState.next(newState);
 
     console.log("New state:", this._appState.value);
