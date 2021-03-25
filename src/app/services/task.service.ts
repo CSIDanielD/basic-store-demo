@@ -21,29 +21,36 @@ export class TaskService {
   }
 
   private registerGetTasks() {
-    this.store.registerAction<UserTask[]>("getTasks", async s => {
+    this.store.registerAction<UserTask[]>("getTasks", async getState => {
       const tasks = await this.fakeBackend.getTasks().toPromise();
+      const s = getState();
+
       s.tasks = tasks;
       return s;
     });
   }
 
   private registerMakeFakeTasks(fakeTasks: UserTask[] = []) {
-    this.store.registerAction("makeFakeTasks", s => {
+    this.store.registerAction("makeFakeTasks", getState => {
+      const s = getState();
+
       s.tasks = fakeTasks;
       return s;
     });
   }
 
   private registerAddTask() {
-    this.store.registerAction<UserTask>("addTask", (s, task) => {
+    this.store.registerAction<UserTask>("addTask", (getState, task) => {
+      const s = getState();
+
       s.tasks.push(task);
       return s;
     });
   }
 
   private registerUpdateTask() {
-    this.store.registerAction("updateTask", (s, task) => {
+    this.store.registerAction("updateTask", (getState, task) => {
+      const s = getState();
       const index = s.tasks.findIndex(task);
 
       if (index > -1) {

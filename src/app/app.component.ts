@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { map } from "rxjs/operators";
 import { NoteService } from "./services/note.service";
 import { StoreService } from "./services/store.service";
 import { TaskService } from "./services/task.service";
@@ -16,14 +15,6 @@ export class AppComponent implements OnInit {
     public noteService: NoteService
   ) {}
 
-  get tasks$() {
-    return this.store.appState.pipe(map((v, i) => v.tasks));
-  }
-
-  get notes$() {
-    return this.store.appState.pipe(map((v, i) => v.notes));
-  }
-
   get updateCount() {
     return this.store.stateUpdateCount;
   }
@@ -31,6 +22,8 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.store.dispatchAction("getTasks"); // Async, will update state second.
     this.store.dispatchAction("makeFakeTasks"); // Synchronous, will update state first.
-    // this.store.dispatchAction("getNotes");
+    this.store.dispatchAction("getNotes"); // Async, will update state third.
+
+    // Found a problem - async functions will update the state with the state that existed prior to them await-ing.
   }
 }

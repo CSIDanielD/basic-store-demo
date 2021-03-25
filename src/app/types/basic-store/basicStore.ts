@@ -47,7 +47,7 @@ export class BasicStore<S extends {}> {
     this._actionReducers.value[action] =
       actionReducer ||
       function(s) {
-        return s;
+        return s();
       };
   }
 
@@ -63,7 +63,12 @@ export class BasicStore<S extends {}> {
     }
 
     const evaluatedState = new Promise<S>((resolve, reject) => {
-      return resolve(reducer({ ...this._appState.value }, args));
+      // This is the function used by actions to resolve the current state
+      const stateFn = () => {
+        return { ...this._appState.value };
+      };
+
+      return resolve(reducer(stateFn, args));
     });
 
     const newState = await evaluatedState;

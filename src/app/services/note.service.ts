@@ -25,9 +25,11 @@ export class NoteService {
     context.registerAction("getNotes", this.getNotes);
   }
 
-  private async getNotes(s: AppState) {
+  private getNotes: ActionReducer<AppState> = async getState => {
     const notes = await this.fakeBackend.getNotes().toPromise();
+
+    const s = getState();
     s.notes = notes;
     return s;
-  }
+  };
 }

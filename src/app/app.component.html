@@ -1,9 +1,7 @@
 <h3>Tasks</h3>
-<code>{{(tasks$ | async) | json}}</code>
+<app-task-list></app-task-list>
 
 <h3>Notes</h3>
-<pre>
-  <code>{{(notes$ | async) | json}}</code>
-</pre>
+<app-note-list></app-note-list>
 
 <p>State update count is: {{updateCount}}</p>
