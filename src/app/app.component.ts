@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store.dispatchAction("getTasks"); // Async, will update state second.
-    this.store.dispatchAction("makeFakeTasks"); // Synchronous, will update state first.
+    // this.store.dispatchAction("getTasks"); // Async, will update state second.
+    // this.store.dispatchAction("makeFakeTasks"); // Synchronous, will update state first.
   }
 }

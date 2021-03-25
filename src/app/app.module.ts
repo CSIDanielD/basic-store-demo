@@ -6,12 +6,19 @@ import { AppComponent } from "./app.component";
 import { StoreService } from "./services/store.service";
 import { TaskService } from "./services/task.service";
 import { NoteService } from "./services/note.service";
-import { FakeBackendService } from './services/fake-backend.service';
+import { FakeBackendService } from "./services/fake-backend.service";
+import { AppStore } from "./types/appStore";
 
 @NgModule({
   imports: [BrowserModule, FormsModule],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
-  providers: [StoreService, TaskService, NoteService, FakeBackendService]
+  providers: [
+    StoreService,
+    TaskService,
+    NoteService,
+    FakeBackendService,
+    AppStore
+  ]
 })
 export class AppModule {}
