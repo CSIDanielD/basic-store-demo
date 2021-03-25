@@ -9,7 +9,6 @@ class ActionContext<S> {
   constructor(private store: BasicStore<S>, private thisRef: any) {}
 
   registerAction<P = any>(action: string, actionReducer: ActionReducer<S, P>) {
-    console.log(`Registering ${action}`);
     this.store.registerAction(action, actionReducer.bind(this.thisRef));
   }
 }
@@ -20,7 +19,6 @@ export class NoteService {
     private store: StoreService,
     private fakeBackend: FakeBackendService
   ) {
-    console.log("Notes");
     const context = new ActionContext(this.store, this);
     context.registerAction("getNotes", this.getNotes);
   }

@@ -23,7 +23,5 @@ export class AppComponent implements OnInit {
     this.store.dispatchAction("getTasks"); // Async, will update state second.
     this.store.dispatchAction("makeFakeTasks"); // Synchronous, will update state first.
     this.store.dispatchAction("getNotes"); // Async, will update state third.
-
-    // Found a problem - async functions will update the state with the state that existed prior to them await-ing.
   }
 }
