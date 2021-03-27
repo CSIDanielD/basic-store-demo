@@ -1,8 +1,7 @@
-export interface UserTask {
-  taskId: number;
-  name: string;
-  difficulty?: number;
-  progress?: number;
-}
+import { TaskStatus } from "./taskStatus";
 
-export default UserTask;
+export interface UserTask {
+  userId: number;
+  taskId: number;
+  taskStatus: TaskStatus;
+}

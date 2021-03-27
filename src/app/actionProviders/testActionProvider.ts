@@ -7,30 +7,43 @@ type PayloadActionReducer<A extends Action, S> =
   | ((action: A, getState: () => S) => S)
   | ((action: A, getState: () => S) => Promise<S>);
 
-class ActionStore<S, A extends Action> {
-  dispatchAction(action: A) {}
+/** Got this from NGXS's Action decorator definition */
+
+export interface ActionDef<T = any, U = any> {
+  type: string;
+
+  new (...args: T[]): U;
 }
 
-interface TestA {
-  type: "TestA";
-  a: string;
+export type ActionType = ActionDef | { type: string };
+
+/** Registers the action on the provided store and provides the store's state and action type
+ *  to the method's parameters.
+ */
+function Action<S, P = any>(): MethodDecorator {
+  return (target: any, name: string | symbol) => {
+    return;
+  };
 }
 
-interface TestB {
-  type: "TestB";
-  b: number;
+/* Maybe make an AsyncAction decorator that will wait until the 
+   provided async observable emits until the ActionReducer is called?
+   That way, nobody has to worry about doing a getState() after the await,
+   and we don't run into mysterious old state overwrites.
+*/
+
+class ActionContext<S> {
+  Action<A extends ActionType>(): MethodDecorator {
+    return (target: any, name: string | symbol) => {};
+  }
 }
 
-interface TestC {
-  type: "TestC";
-  b: number;
+class Store<S> {
+  dispatch<A extends ActionType>(action: A) {}
 }
 
-type ActionsA = TestA | TestB;
-type ActionsB = TestC;
-type Actions = ActionsA | ActionsB;
+class UserActionProvider {}
 
-class ConcreteStore extends ActionStore<AppState, Actions> {}
+class ConcreteStore extends Store<AppState> {}
 
 const store = new ConcreteStore();
-store.dispatchAction({ a: "5" });

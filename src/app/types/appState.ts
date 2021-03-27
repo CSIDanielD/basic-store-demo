@@ -1,9 +1,9 @@
-import Note from "./note";
-import UserTask from "./userTask";
+import { Note } from "./note";
+import { User } from "./user";
+import { UserTask } from "./userTask";
 
 export interface AppState {
+  users: User[];
   tasks: UserTask[];
   notes: Note[];
 }
-
-export default AppState;

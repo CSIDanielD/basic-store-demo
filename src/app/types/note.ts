@@ -1,8 +1,6 @@
 export interface Note {
-  noteId: number;
+  userId: number;
   taskId: number;
+  noteId: number;
   text: string;
-  timestamp: number;
 }
-
-export default Note;
