@@ -20,7 +20,8 @@ export class StoreService extends BasicStore<AppState> {
   constructor() {
     super(StoreService.defaultState);
 
-    this.appState.pipe(skip(1)).subscribe(s => {
+    const state$ = this.selectAsync(s => s);
+    state$.pipe(skip(1)).subscribe(s => {
       this._stateUpdateCount.next(this._stateUpdateCount.value + 1);
     });
   }

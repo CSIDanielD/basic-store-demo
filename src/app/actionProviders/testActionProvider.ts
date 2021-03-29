@@ -1,5 +1,5 @@
-import AppState from "../types/appState";
-import ActionReducer from "../types/basic-store/actionReducer";
+import { AppState } from "../types/appState";
+import { ActionReducer } from "../types/basic-store/actionReducer";
 
 type Action = { type: string };
 
@@ -39,11 +39,31 @@ class ActionContext<S> {
 }
 
 class Store<S> {
+  public readonly context = new ActionContext<S>();
+
   dispatch<A extends ActionType>(action: A) {}
 }
-
-class UserActionProvider {}
 
 class ConcreteStore extends Store<AppState> {}
 
 const store = new ConcreteStore();
+
+class TestAction {}
+
+function TestDecorator(
+  target: any,
+  propertyKey: string,
+  descriptor: PropertyDescriptor
+) {
+  const originalMethod = descriptor.value;
+
+  return descriptor;
+}
+
+class ActionProvider {
+  public context = new ActionContext<AppState>();
+
+  constructor() {
+    this.context.Action();
+  }
+}

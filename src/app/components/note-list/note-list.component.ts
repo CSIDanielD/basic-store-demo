@@ -10,7 +10,7 @@ export class NoteListComponent implements OnInit {
   constructor(private store: StoreService) {}
 
   get notes$() {
-    return this.store.select(s => s.notes);
+    return this.store.selectAsync(s => s.notes);
   }
 
   ngOnInit() {}

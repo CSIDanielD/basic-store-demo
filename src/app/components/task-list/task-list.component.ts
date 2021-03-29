@@ -10,7 +10,7 @@ export class TaskListComponent implements OnInit {
   constructor(private store: StoreService) {}
 
   get tasks$() {
-    return this.store.select(s => s.tasks);
+    return this.store.selectAsync(s => s.tasks);
   }
 
   ngOnInit() {}
