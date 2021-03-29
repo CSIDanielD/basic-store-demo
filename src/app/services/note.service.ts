@@ -3,15 +3,7 @@ import { FakeBackendService } from "./fake-backend.service";
 import { StoreService } from "./store.service";
 import { AppState } from "../types/appState";
 import { ActionReducer } from "../types/basic-store/actionReducer";
-import { BasicStore } from "../types/basic-store/basicStore";
-
-class ActionContext<S> {
-  constructor(private store: BasicStore<S>, private thisRef: any) {}
-
-  registerAction<P = any>(action: string, actionReducer: ActionReducer<S, P>) {
-    this.store.registerAction(action, actionReducer.bind(this.thisRef));
-  }
-}
+import { ActionContext } from "../types/basic-store/actionContext";
 
 @Injectable({ providedIn: "root" })
 export class NoteService {
@@ -23,10 +15,12 @@ export class NoteService {
     context.registerAction("getNotes", this.getNotes);
   }
 
-  private getNotes: ActionReducer<AppState> = async getState => {
+  private getNotes: ActionReducer<AppState> = async (action, getState) => {
     const notes = await this.fakeBackend.getNotes().toPromise();
 
-    const s = getState();
+    console.log("Got notes:", notes);
+
+    const s = this.store.select(s => s);
     s.notes = notes;
     return s;
   };

@@ -3,6 +3,10 @@ import { NoteService } from "./services/note.service";
 import { StoreService } from "./services/store.service";
 import { TaskService } from "./services/task.service";
 
+class GetNotesAction {
+  public type = "getNotes";
+}
+
 @Component({
   selector: "my-app",
   templateUrl: "./app.component.html",
@@ -22,6 +26,6 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     // this.store.dispatchAction("getTasks"); // Async, will update state second.
     // this.store.dispatchAction("makeFakeTasks"); // Synchronous, will update state first.
-    // this.store.dispatchAction("getNotes"); // Async, will update state third.
+    this.store.dispatchAction(new GetNotesAction()); // Async, will update state third.
   }
 }

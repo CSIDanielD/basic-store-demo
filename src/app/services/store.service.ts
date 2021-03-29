@@ -9,7 +9,14 @@ export class StoreService extends BasicStore<AppState> {
   static readonly defaultState: AppState = {
     users: [],
     notes: [],
-    tasks: []
+    tasks: [
+      {
+        userId: 1,
+        taskId: 2,
+        description: "Test Task",
+        taskStatus: "In Progress"
+      }
+    ]
   };
 
   private _stateUpdateCount = new BehaviorSubject<number>(0);
