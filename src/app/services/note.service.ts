@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
-import AppState from "../types/appState";
-import ActionReducer from "../types/basic-store/actionReducer";
-import BasicStore from "../types/basic-store/basicStore";
 import { FakeBackendService } from "./fake-backend.service";
 import { StoreService } from "./store.service";
+import { AppState } from "../types/appState";
+import { ActionReducer } from "../types/basic-store/actionReducer";
+import { BasicStore } from "../types/basic-store/basicStore";
 
 class ActionContext<S> {
   constructor(private store: BasicStore<S>, private thisRef: any) {}

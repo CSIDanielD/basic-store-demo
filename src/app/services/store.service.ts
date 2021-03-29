@@ -1,21 +1,15 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { skip } from "rxjs/operators";
-import AppState from "../types/appState";
-import BasicStore from "../types/basic-store/basicStore";
+import { AppState } from "../types/appState";
+import { BasicStore } from "../types/basic-store/basicStore";
 
 @Injectable({ providedIn: "root" })
 export class StoreService extends BasicStore<AppState> {
   static readonly defaultState: AppState = {
+    users: [],
     notes: [],
-    tasks: [
-      {
-        taskId: 999,
-        name: "Initial task",
-        difficulty: 9001,
-        progress: 0.0
-      }
-    ]
+    tasks: []
   };
 
   private _stateUpdateCount = new BehaviorSubject<number>(0);
