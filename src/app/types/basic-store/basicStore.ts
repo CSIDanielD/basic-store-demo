@@ -1,6 +1,6 @@
 import { BehaviorSubject, Subject } from "rxjs";
 import { map } from "rxjs/operators";
-import { ActionType } from "../../actionProviders/testActionProvider";
+import { ActionType } from "./action";
 import { ActionReducer } from "./actionReducer";
 
 export class BasicStore<S> {
@@ -27,8 +27,6 @@ export class BasicStore<S> {
       throw new Error(`Already registered reducer for action '${actionType}'!`);
     }
 
-    console.log(`Registering action: ${actionType}`);
-
     const reducers = { ...this._reducers.value };
     reducers[actionType] = reducer;
 
@@ -36,13 +34,11 @@ export class BasicStore<S> {
   }
 
   dispatchAction<A extends ActionType>(action: A) {
-    console.log(`Dispatching action:`, action);
     this._dispatch.next(action);
   }
 
   /** Update the store's state according to the given action's registered reducer.  */
   protected async commitAction<A extends ActionType>(action: A) {
-    console.log(`Begin committing action:`, action);
     const reducer = this._reducers.value[action.type];
     if (!reducer) {
       throw new Error(`No reducer assigned for the action '${action.type}'`);

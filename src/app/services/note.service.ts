@@ -18,8 +18,6 @@ export class NoteService {
   private getNotes: ActionReducer<AppState> = async (action, getState) => {
     const notes = await this.fakeBackend.getNotes().toPromise();
 
-    console.log("Got notes:", notes);
-
     const s = this.store.select(s => s);
     s.notes = notes;
     return s;
