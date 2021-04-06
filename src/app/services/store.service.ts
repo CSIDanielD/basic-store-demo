@@ -17,7 +17,6 @@ export class StoreService {
       }
     ]
   };
-  
 
   private _stateUpdateCount = new BehaviorSubject<number>(0);
   get stateUpdateCount() {

@@ -39,10 +39,6 @@ export class FakeBackendService {
     );
   }
 
-  getNotes() {
-    return this.toDelayedSingleEmitter(this.selectAsync(s => s.notes));
-  }
-
   addUser(user: User) {
     return this.addValue(s => s.users, "userId", user);
   }
@@ -65,6 +61,10 @@ export class FakeBackendService {
 
   removeTask(taskId: number) {
     return this.removeValue(s => s.tasks, s => s.taskId === taskId);
+  }
+
+  getNotes() {
+    return this.toDelayedSingleEmitter(this.selectAsync(s => s.notes));
   }
 
   addNote(note: Note) {
