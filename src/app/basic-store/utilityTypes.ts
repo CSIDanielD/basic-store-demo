@@ -1,7 +1,12 @@
 import { Action, ActionCreator, ActionCreatorWithoutPayload } from "./action";
-
 import { ActionReducer, ActionReducerMap } from "./actionReducer";
 import { Reducer, ReducerMap } from "./reducer";
+
+export type ActionCreatorFromPropType<P> = IsUnknown<
+  P,
+  ActionCreatorWithoutPayload,
+  ActionCreator<P>
+>;
 
 /** Infers an ActionCreator type from an Action */
 export type InferActionCreatorFromAction<A> = A extends Action<infer P>

@@ -1,6 +1,7 @@
-import { ActionCreator } from "./action";
+import { ActionCreator, ActionCreatorWithoutPayload } from "./action";
 import { Reducer, ReducerMap } from "./reducer";
 import {
+  ActionCreatorFromPropType,
   InferActionReducerFromReducer,
   InferActionReducerMapFromReducerMap
 } from "./utilityTypes";
@@ -51,6 +52,19 @@ export function createActionContext<State>(
     };
   }
 
+  function createActionCreatorWithoutPayload(
+    type: string
+  ): ActionCreatorWithoutPayload {
+    const actionType =
+      contextName && contextName.trim().length > 0
+        ? `${contextName.trim()}/${type.trim()}`
+        : `${type.trim()}`;
+
+    return () => {
+      return { type: actionType, payload: undefined };
+    };
+  }
+
   function createActionReducerMap<M extends ReducerMap<State, any>>(
     reducerMap: M
   ): InferActionReducerMapFromReducerMap<M> {
@@ -59,7 +73,7 @@ export function createActionContext<State>(
         const [actionType, reducer] = entry;
 
         const actionReducer: InferActionReducerFromReducer<typeof reducer> = {
-          actionCreator: createActionCreator(actionType),
+          actionCreator: createActionCreator(actionType)
           reducer: reducer
         };
 
