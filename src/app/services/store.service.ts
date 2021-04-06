@@ -32,7 +32,6 @@ export class StoreService {
     private userService: UserService,
     private noteService: NoteService
   ) {
-
     // Increment the state update counter when the state changes.
     this.store
       .selectAsync(s => s)
