@@ -3,5 +3,6 @@ export interface Action<P = any> {
   payload: P;
 }
 
-export type ActionCreator<P> = (payload: P) => Action<P>;
+// TODO: Find a way to make payload required without mandating non-payload actions to provide an argument.
+export type ActionCreator<P> = (payload?: P) => Action<P>;
 export type ActionCreatorWithoutPayload = () => Action<undefined>;
