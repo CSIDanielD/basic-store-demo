@@ -15,12 +15,12 @@ import { ReducerMap } from "./reducer";
  *  class ActionServiceB {
  *    providedActionB = context.createReducer(getState => getState());
  *  }
- *  
+ *
  * // Elsewhere in code...
- *  
+ *
  *  const merged = createProviderFrom({...ActionServiceA}).mergeProvider({...ActionServiceB});`
  * */
-function createProviderFrom<Provider extends ReducerMap<any, any>>(
+export function createProviderFrom<Provider extends ReducerMap<any, any>>(
   provider: Provider
 ) {
   function mergeProvider<NewProvider extends ReducerMap<any, any>>(

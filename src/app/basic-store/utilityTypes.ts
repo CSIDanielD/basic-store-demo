@@ -1,4 +1,5 @@
-import { Action, ActionCreator } from "./action";
+import { Action, ActionCreator, ActionCreatorWithoutPayload } from "./action";
+
 import { ActionReducer, ActionReducerMap } from "./actionReducer";
 import { Reducer, ReducerMap } from "./reducer";
 
@@ -12,7 +13,7 @@ export type InferPayloadFromAction<A> = A extends Action<infer P> ? P : never;
 
 /** Infers an ActionCreator type from a Reducer */
 export type InferActionCreatorFromReducer<R> = R extends Reducer<any, infer P>
-  ? ActionCreator<P>
+  ? IsUnknown<P, ActionCreatorWithoutPayload, ActionCreator<P>>
   : never;
 
 /** Infers an ActionCreator type from an ActionReducer */
@@ -53,3 +54,24 @@ export type Merge<A, B> = ({ [K in keyof A]: K extends keyof B ? B[K] : A[K] } &
   B) extends infer O
   ? { [K in keyof O]: O[K] }
   : never;
+
+// return True if T is `never`, otherwise return False
+// wrap with array to prevent args distributing
+// Taken from: https://github.com/joonhocho/tsdef
+export type IsNever<T, True, False = never> = [T] extends [never]
+  ? True
+  : False;
+
+// return True if T is `any`, otherwise return False
+// Taken from: https://github.com/joonhocho/tsdef
+export type IsAny<T, True, False = never> = (
+  | True
+  | False) extends (T extends never ? True : False)
+  ? True
+  : False;
+
+// return True if T is `unknown`, otherwise return False
+// Taken from: https://github.com/joonhocho/tsdef
+export type IsUnknown<T, True, False = never> = unknown extends T
+  ? IsAny<T, False, True>
+  : False;

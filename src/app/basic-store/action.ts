@@ -3,4 +3,5 @@ export interface Action<P = any> {
   payload: P;
 }
 
-export type ActionCreator<P = any> = (payload: P) => Action<P>;
+export type ActionCreator<P> = (payload: P) => Action<P>;
+export type ActionCreatorWithoutPayload = () => Action<undefined>;
