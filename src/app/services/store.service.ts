@@ -2,6 +2,8 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { skip } from "rxjs/operators";
 import { AppState } from "../types/appState";
+import { NoteService } from "./note.service";
+import { UserService } from "./user.service";
 
 @Injectable({ providedIn: "root" })
 export class StoreService {
@@ -23,5 +25,8 @@ export class StoreService {
     return this._stateUpdateCount.value;
   }
 
-  constructor() {}
+  constructor(
+    private userService: UserService,
+    private noteService: NoteService
+  ) {}
 }
