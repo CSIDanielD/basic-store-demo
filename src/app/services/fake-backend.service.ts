@@ -1,11 +1,5 @@
 import { Injectable } from "@angular/core";
-import {
-  asapScheduler,
-  asyncScheduler,
-  BehaviorSubject,
-  Observable,
-  scheduled
-} from "rxjs";
+import { asapScheduler, BehaviorSubject, Observable, scheduled } from "rxjs";
 import { delay, map, take } from "rxjs/operators";
 import { AppState } from "../types/appState";
 import { Note } from "../types/note";
