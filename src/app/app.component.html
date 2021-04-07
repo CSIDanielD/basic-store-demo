@@ -1,7 +1,32 @@
-<h3>Tasks</h3>
-<app-task-list></app-task-list>
+<div class="container">
+  <h3>Users</h3>
+  <app-user-list></app-user-list>
 
-<h3>Notes</h3>
-<app-note-list></app-note-list>
+  <h3>Tasks</h3>
+  <app-task-list></app-task-list>
 
-<p>State update count is: {{updateCount}}</p>
+  <h3>Notes</h3>
+  <app-note-list></app-note-list>
+
+  <div class="clearfix">
+    <div class="mt-2 float-right">
+
+      <button
+        type="button"
+        class="btn btn-secondary mr-1"
+        (click)="addUsersAndTasks()"
+      >
+        Add Sample User Data
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="fetchUsersAndTasks()"
+      >
+        Fetch Data
+      </button>
+    </div>
+  </div>
+
+  <p>State update count is: {{updateCount}}</p>
+</div>

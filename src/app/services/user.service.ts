@@ -41,7 +41,9 @@ export class UserService {
   updateUserAsync = context.createReducer(
     async (getState, payload: { userId: number; user: User }) => {
       // Fetch & await data from the fake API
-      const result = await this.fakeBackend.getUsersAndTasks().toPromise();
+      const result = await this.fakeBackend
+        .updateUser(payload.userId, payload.user)
+        .toPromise();
 
       // Get the current state after awaiting
       const state = getState();
@@ -60,7 +62,7 @@ export class UserService {
 
   removeUserAsync = context.createReducer(async (getState, userId: number) => {
     // Fetch & await data from the fake API
-    const result = await this.fakeBackend.getUsersAndTasks().toPromise();
+    const result = await this.fakeBackend.removeUser(userId).toPromise();
 
     // Get the current state after awaiting
     const state = getState();

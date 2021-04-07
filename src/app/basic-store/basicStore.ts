@@ -37,14 +37,6 @@ export class BasicStore<S, R extends ReducerMap<S, any>> {
     >;
   }
 
-  /** Get the registered action by the given actionType. If you only need a single action, this is a more efficient way of retriving it.  */
-  getAction<T extends keyof R>(
-    actionType: keyof R
-  ): InferActionCreatorFromReducer<R[T]> {
-    const actionReducer = this._actionReducers.value[actionType as string];
-    return actionReducer.actionCreator as InferActionCreatorFromReducer<R[T]>;
-  }
-
   /**
    * Select all or a part of the current state value synchronously.
    * @param selector The selector that will be called with the current state value.

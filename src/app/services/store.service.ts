@@ -5,6 +5,8 @@ import { createProviderFrom } from "../basic-store/actionProvider";
 import { BasicStore } from "../basic-store/basicStore";
 import { defaultState } from "../state/defaultState";
 import { NoteService } from "./note.service";
+import { StateUtilityService } from "./state-utility.service";
+import { TaskService } from "./task.service";
 import { UserService } from "./user.service";
 
 @Injectable({ providedIn: "root" })
@@ -12,7 +14,10 @@ export class StoreService {
   // Create a ReducerMap from all the actions provided by the injected services.
   private _actionProviders = createProviderFrom({
     ...this.userService
-  }).mergeProvider({ ...this.noteService });
+  })
+    .mergeProvider({ ...this.noteService })
+    .mergeProvider({ ...this.taskService })
+    .mergeProvider({ ...this.stateUtilityService });
 
   // Create the store instance with the default state and registered providers
   store = new BasicStore(defaultState, this._actionProviders.provider);
@@ -26,13 +31,6 @@ export class StoreService {
    */
   get actions() {
     return this.store.actions;
-  }
-
-  /** Get the registered action by the given actionType. If you only need a single action, this is a more efficient way of retriving it.  */
-  get getAction() {
-    const fn = this.store.getAction;
-    const bound = fn.bind(this.store);
-    return bound as typeof fn;
   }
 
   /**
@@ -72,7 +70,9 @@ export class StoreService {
 
   constructor(
     private userService: UserService,
-    private noteService: NoteService
+    private noteService: NoteService,
+    private taskService: TaskService,
+    private stateUtilityService: StateUtilityService
   ) {
     // Increment the state update counter when the state changes.
     this.store
