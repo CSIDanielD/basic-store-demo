@@ -8,31 +8,13 @@ import {
   InferActionReducerMapFromReducerMap
 } from "./utilityTypes";
 
-export interface ActionContext<State> {
-  readonly createReducer: <P>(
-    reducer:
-      | ((getState: () => State, payload?: P) => State)
-      | ((getState: () => State, payload?: P) => Promise<State>)
-  ) => Reducer<State, P>;
-
-  readonly createReducerMap: <M extends ReducerMap<State, any>>(map: M) => M;
-
-  readonly createActionCreator: <P = any>(
-    type: string
-  ) => ActionCreatorWithPayload<P> | ActionCreatorWithoutPayload;
-
-  readonly createActionReducerMap: <M extends ReducerMap<State, any>>(
-    reducerMap: M
-  ) => InferActionReducerMapFromReducerMap<M>;
-}
-
 /**
- * Create a "Context" for ActionReducer creation methods. The same as createActionContext,
- * but doesn't allow providing a contextName parameter.
- * @see createActionContext
+ * Create a "Context" for ActionReducer creation methods. This is shorthand for `new ActionContext<State>()`,
+ * but it doesn't allow passing the `contextName` parameter.
+ * @see ActionContext
  */
 export function withState<State>() {
-  return createActionContext<State>();
+  return new ActionContext<State>();
 }
 
 /**
@@ -41,10 +23,10 @@ export function withState<State>() {
  * to allow Typescript's type inference to work correctly. Typescript doesn't support partial
  * type inference (you either provide all generic params or none), so this is the way around that.
  */
-export function createActionContext<State>(
-  contextName?: string
-): ActionContext<State> {
-  function createReducer<P>(
+export class ActionContext<State> {
+  constructor(public contextName?: string) {}
+
+  createReducer<P>(
     reducer:
       | ((getState: () => State, payload?: P) => State)
       | ((getState: () => State, payload?: P) => Promise<State>)
@@ -52,17 +34,16 @@ export function createActionContext<State>(
     return reducer as Reducer<State, P>;
   }
 
-  function createReducerMap<M extends ReducerMap<State, any>>(map: M): M {
+  createReducerMap<M extends ReducerMap<State, any>>(map: M): M {
     return map;
   }
 
-  // function createActionCreator<P>(type: string): ActionCreator<P> {
-  function createActionCreator<P>(
+  createActionCreator<P>(
     type: string
   ): ActionCreatorWithPayload<P> | ActionCreatorWithoutPayload {
     const actionType =
-      contextName && contextName.trim().length > 0
-        ? `${contextName.trim()}/${type.trim()}`
+      this.contextName && this.contextName.trim().length > 0
+        ? `${this.contextName.trim()}/${type.trim()}`
         : `${type.trim()}`;
 
     return (payload: P) => {
@@ -70,7 +51,7 @@ export function createActionContext<State>(
     };
   }
 
-  function createActionReducerMap<M extends ReducerMap<State, any>>(
+  createActionReducerMap<M extends ReducerMap<State, any>>(
     reducerMap: M
   ): InferActionReducerMapFromReducerMap<M> {
     const actionReducerMap = Object.entries(reducerMap).reduce(
@@ -78,7 +59,7 @@ export function createActionContext<State>(
         const [actionType, reducer] = entry;
 
         const actionReducer: InferActionReducerFromReducer<typeof reducer> = {
-          actionCreator: createActionCreator(actionType),
+          actionCreator: this.createActionCreator(actionType),
           reducer: reducer
         };
 
@@ -91,11 +72,4 @@ export function createActionContext<State>(
 
     return actionReducerMap as InferActionReducerMapFromReducerMap<M>;
   }
-
-  return {
-    createReducer: createReducer,
-    createReducerMap: createReducerMap,
-    createActionCreator: createActionCreator,
-    createActionReducerMap: createActionReducerMap
-  };
 }

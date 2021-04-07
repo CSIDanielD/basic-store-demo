@@ -1,11 +1,10 @@
 import { BehaviorSubject, Subject } from "rxjs";
 import { map } from "rxjs/operators";
 import { Action } from "./action";
-import { createActionContext } from "./actionContext";
+import { ActionContext } from "./actionContext";
 import { ReducerMap } from "./reducer";
 import { Selector } from "./selector";
 import {
-  InferActionCreatorFromReducer,
   InferActionCreatorMapFromActionReducerMap,
   InferActionReducerMapFromReducerMap
 } from "./utilityTypes";
@@ -89,7 +88,7 @@ export class BasicStore<S, R extends ReducerMap<S, any>> {
   constructor(initialState: S, reducers: R) {
     this._state = new BehaviorSubject(initialState);
     this._actionReducers = new BehaviorSubject(
-      createActionContext<S>().createActionReducerMap(reducers)
+      new ActionContext<S>().createActionReducerMap(reducers)
     );
 
     // Automatically commit actions to mutate the state
