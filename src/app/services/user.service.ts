@@ -11,7 +11,7 @@ const context = withState<AppState>();
 export class UserService {
   constructor(private fakeBackend: FakeBackendService) {}
 
-  getUsersAndTasks = context.createReducer(async getState => {
+  getUsersAndTasksAsync = context.createReducer(async getState => {
     // Fetch & await data from the fake API
     const usersAndTasks = await this.fakeBackend.getUsersAndTasks().toPromise();
 
@@ -24,7 +24,7 @@ export class UserService {
     return state;
   });
 
-  addUser = context.createReducer(async (getState, user: User) => {
+  addUserAsync = context.createReducer(async (getState, user: User) => {
     // Fetch & await data from the fake API
     const result = await this.fakeBackend.addUser(user).toPromise();
 
@@ -38,7 +38,7 @@ export class UserService {
     return state;
   });
 
-  updateUser = context.createReducer(
+  updateUserAsync = context.createReducer(
     async (getState, payload: { userId: number; user: User }) => {
       // Fetch & await data from the fake API
       const result = await this.fakeBackend.getUsersAndTasks().toPromise();
@@ -58,7 +58,7 @@ export class UserService {
     }
   );
 
-  removeUser = context.createReducer(async (getState, userId: number) => {
+  removeUserAsync = context.createReducer(async (getState, userId: number) => {
     // Fetch & await data from the fake API
     const result = await this.fakeBackend.getUsersAndTasks().toPromise();
 

@@ -11,7 +11,7 @@ const context = withState<AppState>();
 export class NoteService {
   constructor(private fakeBackend: FakeBackendService) {}
 
-  getNotes = context.createReducer(async getState => {
+  getNotesAsync = context.createReducer(async getState => {
     // Fetch & await data from the fake API
     const notes = await this.fakeBackend.getNotes().toPromise();
 
@@ -21,7 +21,7 @@ export class NoteService {
     return state;
   });
 
-  addNote = context.createReducer(async (getState, note: Note) => {
+  addNoteAsync = context.createReducer(async (getState, note: Note) => {
     // Fetch & await data from the fake API
     const result = await this.fakeBackend.addNote(note).toPromise();
 
@@ -35,7 +35,7 @@ export class NoteService {
     return state;
   });
 
-  updateNote = context.createReducer(
+  updateNoteAsync = context.createReducer(
     async (getState, payload: { noteId: number; note: Note }) => {
       // Fetch & await data from the fake API
       const result = await this.fakeBackend
@@ -56,7 +56,7 @@ export class NoteService {
     }
   );
 
-  removeNote = context.createReducer(async (getState, noteId: number) => {
+  removeNoteAsync = context.createReducer(async (getState, noteId: number) => {
     // Fetch & await data from the fake API
     const result = await this.fakeBackend.removeNote(noteId).toPromise();
 
