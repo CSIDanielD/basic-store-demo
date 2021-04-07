@@ -21,6 +21,8 @@ export class StoreService {
    * A convenience object containing every action key mapped to its action creator.
    * @use Use the object destructuring syntax to extract whichever registered action(s) you
    * need like this: `const { actionA, actionB } = store.actions;`
+   * @remarks Note that for async actions, the async call is only done *in the reducer*, not in the action creator.
+   * You can safely call these action creators synchronously and cache the actions they create to reuse elsewhere.
    */
   get actions() {
     return this.store.actions;

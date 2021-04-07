@@ -22,6 +22,8 @@ export class AppComponent implements OnInit {
     // Add a new user
     this.store.dispatch(addUserAsync({ userId: 20, userName: "Bill" }));
 
+    this.store.dispatch(addUserAsync({ userId: 21, userName: "Betty" }));
+
     // this.store.dispatchAction("getTasks"); // Async, will update state second.
     // this.store.dispatchAction("makeFakeTasks"); // Synchronous, will update state first.
     // this.store.dispatchAction(new GetNotesAction()); // Async, will update state third.
