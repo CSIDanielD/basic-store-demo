@@ -3,35 +3,19 @@ import { BehaviorSubject } from "rxjs";
 import { skip } from "rxjs/operators";
 import { createProviderFrom } from "../basic-store/actionProvider";
 import { BasicStore } from "../basic-store/basicStore";
-import { AppState } from "../types/appState";
+import { defaultState } from "../state/defaultState";
 import { NoteService } from "./note.service";
 import { UserService } from "./user.service";
 
 @Injectable({ providedIn: "root" })
 export class StoreService {
-  static readonly defaultState: Readonly<AppState> = {
-    users: [],
-    notes: [],
-    tasks: [
-      {
-        userId: 1,
-        taskId: 2,
-        description: "Test Task",
-        taskStatus: "In Progress"
-      }
-    ]
-  };
-
   // Create a ReducerMap from all the actions provided by the injected services.
   private _actionProviders = createProviderFrom({
     ...this.userService
   }).mergeProvider({ ...this.noteService });
 
   // Create the store instance with the default state and registered providers
-  store = new BasicStore(
-    StoreService.defaultState,
-    this._actionProviders.provider
-  );
+  store = new BasicStore(defaultState, this._actionProviders.provider);
 
   /**
    * A convenience object containing every action key mapped to its action creator.
@@ -72,14 +56,6 @@ export class StoreService {
     private userService: UserService,
     private noteService: NoteService
   ) {
-    const { getUsersAndTasks, addUser } = this.store.actions;
-
-    // Get all the current users from the "backend".
-    this.store.dispatch(getUsersAndTasks());
-
-    // Add a new user
-    this.store.dispatch(addUser({ userId: 20, userName: "Bill" }));
-
     // Increment the state update counter when the state changes.
     this.store
       .selectAsync(s => s)

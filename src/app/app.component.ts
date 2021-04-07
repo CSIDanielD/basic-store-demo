@@ -1,7 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { NoteService } from "./services/note.service";
 import { StoreService } from "./services/store.service";
-import { TaskService } from "./services/task.service";
 
 @Component({
   selector: "my-app",
@@ -9,11 +7,16 @@ import { TaskService } from "./services/task.service";
   styleUrls: ["./app.component.css"]
 })
 export class AppComponent implements OnInit {
-  constructor(
-    public store: StoreService,
-    public taskService: TaskService,
-    public noteService: NoteService
-  ) {}
+  constructor(private store: StoreService) {
+    const { getUsersAndTasks, addUser } = this.store.actions;
+    console.log("Actions:", this.store.actions);
+
+    // // Get all the current users from the "backend".
+    // this.store.dispatch(getUsersAndTasks());
+
+    // // Add a new user
+    // this.store.dispatch(addUser({ userId: 20, userName: "Bill" }));
+  }
 
   get updateCount() {
     return this.store.stateUpdateCount;
