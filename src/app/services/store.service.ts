@@ -27,25 +27,33 @@ export class StoreService {
   }
 
   /** Get the registered action by the given actionType. If you only need a single action, this is a more efficient way of retriving it.  */
-  getAction = this.store.getAction;
+  get getAction() {
+    return this.store.getAction.bind(this.store);
+  }
 
   /**
    * Select all or a part of the current state value synchronously.
    * @param selector The selector that will be called with the current state value.
    */
-  select = this.store.select;
+  get select() {
+    return this.store.select.bind(this.store);
+  }
 
   /**
    * Select all or a part of the current state value synchronously.
    * @param selector The selector that will be called with the current state value.
    */
-  selectAsync = this.store.selectAsync;
+  get selectAsync() {
+    return this.store.selectAsync.bind(this.store);
+  }
 
   /**
    * Dispatch an action to update the current state. This is the only way to update the state's value.
    * @param action The action to dispatch. The action's 'type' string must match one of the registered reducers.
    */
-  dispatch = this.store.dispatch;
+  get dispatch() {
+    return this.store.dispatch.bind(this.store);
+  }
 
   private _stateUpdateCount = new BehaviorSubject<number>(0);
   get stateUpdateCount() {

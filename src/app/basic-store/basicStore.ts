@@ -100,6 +100,8 @@ export class BasicStore<S, R extends ReducerMap<S, any>> {
       createActionContext<S>().createActionReducerMap(reducers)
     );
 
+    console.log("Created BasicStore", this._actionReducers.value);
+
     // Automatically commit actions to mutate the state
     this._dispatcher.subscribe(action => this._commitAction(action));
   }

@@ -9,13 +9,12 @@ import { StoreService } from "./services/store.service";
 export class AppComponent implements OnInit {
   constructor(private store: StoreService) {
     const { getUsersAndTasks, addUser } = this.store.actions;
-    console.log("Actions:", this.store.actions);
 
-    // // Get all the current users from the "backend".
-    // this.store.dispatch(getUsersAndTasks());
+    // Get all the current users from the "backend".
+    this.store.dispatch(getUsersAndTasks());
 
-    // // Add a new user
-    // this.store.dispatch(addUser({ userId: 20, userName: "Bill" }));
+    // Add a new user
+    this.store.dispatch(addUser({ userId: 20, userName: "Bill" }));
   }
 
   get updateCount() {
