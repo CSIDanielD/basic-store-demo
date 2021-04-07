@@ -24,6 +24,13 @@ export class UserService {
     return state;
   });
 
+  testUserAction = context.createReducer(
+    async (getState, value: { a: number; b: string }) => {
+      await new Promise<string>(() => {});
+      return getState();
+    }
+  );
+
   addUserAsync = context.createReducer(async (getState, user: User) => {
     // Fetch & await data from the fake API
     const result = await this.fakeBackend.addUser(user).toPromise();

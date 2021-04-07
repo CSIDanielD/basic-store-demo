@@ -12,6 +12,7 @@ import { UserService } from "./user.service";
 @Injectable({ providedIn: "root" })
 export class StoreService {
   // Create a ReducerMap from all the actions provided by the injected services.
+  // TODO: Move this into its own service and inject it into this service? That would keep it separate.
   private _actionProviders = createProviderFrom({
     ...this.userService
   })

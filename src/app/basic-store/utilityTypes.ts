@@ -1,6 +1,11 @@
 import { Action, ActionCreator, ActionCreatorWithoutPayload } from "./action";
 import { ActionReducer, ActionReducerMap } from "./actionReducer";
-import { Reducer, ReducerMap } from "./reducer";
+import {
+  Reducer,
+  ReducerMap,
+  ReducerWithoutPayload,
+  ReducerWithPayload
+} from "./reducer";
 
 export type ActionCreatorFromPropType<P> = IsUnknown<
   P,

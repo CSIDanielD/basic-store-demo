@@ -1,21 +1,26 @@
 import {
-  ActionCreator,
   ActionCreatorWithoutPayload,
   ActionCreatorWithPayload
 } from "./action";
 import { Reducer, ReducerMap } from "./reducer";
 import {
-  ActionCreatorFromPropType,
   InferActionReducerFromReducer,
   InferActionReducerMapFromReducerMap
 } from "./utilityTypes";
 
 export interface ActionContext<State> {
-  readonly createReducer: <R extends Reducer<State, any>>(reducer: R) => R;
+  readonly createReducer: <P>(
+    reducer:
+      | ((getState: () => State, payload?: P) => State)
+      | ((getState: () => State, payload?: P) => Promise<State>)
+  ) => Reducer<State, P>;
+
   readonly createReducerMap: <M extends ReducerMap<State, any>>(map: M) => M;
+
   readonly createActionCreator: <P = any>(
     type: string
   ) => ActionCreatorWithPayload<P> | ActionCreatorWithoutPayload;
+
   readonly createActionReducerMap: <M extends ReducerMap<State, any>>(
     reducerMap: M
   ) => InferActionReducerMapFromReducerMap<M>;
@@ -39,8 +44,12 @@ export function withState<State>() {
 export function createActionContext<State>(
   contextName?: string
 ): ActionContext<State> {
-  function createReducer<R extends Reducer<State, any>>(reducer: R) {
-    return reducer;
+  function createReducer<P>(
+    reducer:
+      | ((getState: () => State, payload?: P) => State)
+      | ((getState: () => State, payload?: P) => Promise<State>)
+  ) {
+    return reducer as Reducer<State, P>;
   }
 
   function createReducerMap<M extends ReducerMap<State, any>>(map: M): M {
