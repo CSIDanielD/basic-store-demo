@@ -81,10 +81,6 @@ export class BasicStore<S, R extends ReducerMap<S, any>> {
     this._state.next(await evaluatedState);
   }
 
-  // TODO: Maybe make these parameters optional, and make the BehaviorSubjects a Partial<T> of their types.
-  // That might make it easy to have strongly-typed actions, but allow us to defer registering them until
-  // Angular's lifecycle kicks in.
-
   constructor(initialState: S, reducers: R) {
     this._state = new BehaviorSubject(initialState);
     this._actionReducers = new BehaviorSubject(
