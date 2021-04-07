@@ -5,7 +5,6 @@ export interface Action<P = any> {
   payload: P;
 }
 
-
 export type ActionCreator<P> = IsUnknown<
   P,
   ActionCreatorWithoutPayload,

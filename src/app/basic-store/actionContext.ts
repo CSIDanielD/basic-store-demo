@@ -1,4 +1,8 @@
-import { ActionCreator, ActionCreatorWithoutPayload } from "./action";
+import {
+  ActionCreator,
+  ActionCreatorWithoutPayload,
+  ActionCreatorWithPayload
+} from "./action";
 import { Reducer, ReducerMap } from "./reducer";
 import {
   ActionCreatorFromPropType,
@@ -9,7 +13,9 @@ import {
 export interface ActionContext<State> {
   readonly createReducer: <R extends Reducer<State, any>>(reducer: R) => R;
   readonly createReducerMap: <M extends ReducerMap<State, any>>(map: M) => M;
-  readonly createActionCreator: <P = any>(type: string) => ActionCreator<P>;
+  readonly createActionCreator: <P = any>(
+    type: string
+  ) => ActionCreatorWithPayload<P> | ActionCreatorWithoutPayload;
   readonly createActionReducerMap: <M extends ReducerMap<State, any>>(
     reducerMap: M
   ) => InferActionReducerMapFromReducerMap<M>;
@@ -41,7 +47,10 @@ export function createActionContext<State>(
     return map;
   }
 
-  function createActionCreator<P = any>(type: string): ActionCreator<P> {
+  // function createActionCreator<P>(type: string): ActionCreator<P> {
+  function createActionCreator<P>(
+    type: string
+  ): ActionCreatorWithPayload<P> | ActionCreatorWithoutPayload {
     const actionType =
       contextName && contextName.trim().length > 0
         ? `${contextName.trim()}/${type.trim()}`

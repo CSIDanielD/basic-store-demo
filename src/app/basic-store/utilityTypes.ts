@@ -16,6 +16,16 @@ export type InferActionCreatorFromAction<A> = A extends Action<infer P>
 /** Infers an ActionCreator type from an Action */
 export type InferPayloadFromAction<A> = A extends Action<infer P> ? P : never;
 
+/** Infers a State type from a Reducer */
+export type InferStateFromReducer<R> = R extends Reducer<infer S, any>
+  ? S
+  : never;
+
+/** Infers a Payload type from a Reducer */
+export type InferPayloadFromReducer<R> = R extends Reducer<any, infer P>
+  ? P
+  : never;
+
 /** Infers an ActionCreator type from a Reducer */
 export type InferActionCreatorFromReducer<R> = R extends Reducer<any, infer P>
   ? IsUnknown<P, ActionCreatorWithoutPayload, ActionCreator<P>>
@@ -80,3 +90,9 @@ export type IsAny<T, True, False = never> = (
 export type IsUnknown<T, True, False = never> = unknown extends T
   ? IsAny<T, False, True>
   : False;
+
+// return True if T is not undefined, otherwise return False
+// Taken from: https://github.com/joonhocho/tsdef
+export type IsNonUndefined<T, True, False = never> = undefined extends T
+  ? False
+  : True;
