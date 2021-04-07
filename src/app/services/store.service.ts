@@ -30,7 +30,9 @@ export class StoreService {
 
   /** Get the registered action by the given actionType. If you only need a single action, this is a more efficient way of retriving it.  */
   get getAction() {
-    return this.store.getAction.bind(this.store);
+    const fn = this.store.getAction;
+    const bound = fn.bind(this.store);
+    return bound as typeof fn;
   }
 
   /**
@@ -38,7 +40,9 @@ export class StoreService {
    * @param selector The selector that will be called with the current state value.
    */
   get select() {
-    return this.store.select.bind(this.store);
+    const fn = this.store.select;
+    const bound = fn.bind(this.store);
+    return bound as typeof fn;
   }
 
   /**
@@ -46,7 +50,9 @@ export class StoreService {
    * @param selector The selector that will be called with the current state value.
    */
   get selectAsync() {
-    return this.store.selectAsync.bind(this.store);
+    const fn = this.store.selectAsync;
+    const bound = fn.bind(this.store);
+    return bound as typeof fn;
   }
 
   /**
@@ -54,7 +60,9 @@ export class StoreService {
    * @param action The action to dispatch. The action's 'type' string must match one of the registered reducers.
    */
   get dispatch() {
-    return this.store.dispatch.bind(this.store);
+    const fn = this.store.dispatch;
+    const bound = fn.bind(this.store);
+    return bound as typeof fn;
   }
 
   private _stateUpdateCount = new BehaviorSubject<number>(0);

@@ -6,10 +6,11 @@ import { AppComponent } from "./app.component";
 import { TaskListComponent } from "./components/task-list/task-list.component";
 import { NoteListComponent } from "./components/note-list/note-list.component";
 import { UserService } from './services/user.service';
+import { UserListComponent } from './components/user-list/user-list.component';
 
 @NgModule({
   imports: [BrowserModule, FormsModule],
-  declarations: [AppComponent, TaskListComponent, NoteListComponent],
+  declarations: [AppComponent, TaskListComponent, NoteListComponent, UserListComponent],
   bootstrap: [AppComponent],
   providers: [UserService]
 })

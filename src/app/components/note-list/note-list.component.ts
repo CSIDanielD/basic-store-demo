@@ -9,9 +9,9 @@ import { StoreService } from "../../services/store.service";
 export class NoteListComponent implements OnInit {
   constructor(private store: StoreService) {}
 
-  // get notes$() {
-  //   return this.store.selectAsync(s => s.notes);
-  // }
+  get notes$() {
+    return this.store.selectAsync(s => s.notes);
+  }
 
   ngOnInit() {}
 }

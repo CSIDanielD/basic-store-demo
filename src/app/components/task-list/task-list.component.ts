@@ -9,9 +9,9 @@ import { StoreService } from "../../services/store.service";
 export class TaskListComponent implements OnInit {
   constructor(private store: StoreService) {}
 
-  // get tasks$() {
-  //   return this.store.selectAsync(s => s.tasks);
-  // }
+  get tasks$() {
+    return this.store.selectAsync(s => s.tasks);
+  }
 
   ngOnInit() {}
 }
