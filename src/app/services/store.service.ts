@@ -33,6 +33,36 @@ export class StoreService {
     this._actionProviders.provider
   );
 
+  /**
+   * A convenience object containing every action key mapped to its action creator.
+   * @use Use the object destructuring syntax to extract whichever registered action(s) you
+   * need like this: `const { actionA, actionB } = store.actions;`
+   */
+  get actions() {
+    return this.store.actions;
+  }
+
+  /** Get the registered action by the given actionType. If you only need a single action, this is a more efficient way of retriving it.  */
+  getAction = this.store.getAction;
+
+  /**
+   * Select all or a part of the current state value synchronously.
+   * @param selector The selector that will be called with the current state value.
+   */
+  select = this.store.select;
+
+  /**
+   * Select all or a part of the current state value synchronously.
+   * @param selector The selector that will be called with the current state value.
+   */
+  selectAsync = this.store.selectAsync;
+
+  /**
+   * Dispatch an action to update the current state. This is the only way to update the state's value.
+   * @param action The action to dispatch. The action's 'type' string must match one of the registered reducers.
+   */
+  dispatch = this.store.dispatch;
+
   private _stateUpdateCount = new BehaviorSubject<number>(0);
   get stateUpdateCount() {
     return this._stateUpdateCount.value;
@@ -48,7 +78,7 @@ export class StoreService {
     this.store.dispatch(getUsersAndTasks());
 
     // Add a new user
-    this.store.dispatch(addUser({userId: 20, userName: "Bill"}));
+    this.store.dispatch(addUser({ userId: 20, userName: "Bill" }));
 
     // Increment the state update counter when the state changes.
     this.store
