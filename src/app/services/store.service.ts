@@ -42,14 +42,21 @@ export class StoreService {
     private userService: UserService,
     private noteService: NoteService
   ) {
-    const { getUsersAndTasks, addNote } = this.store.actions;
+    const { getUsersAndTasks, addUser } = this.store.actions;
+
+    // Get all the current users from the "backend".
+    this.store.dispatch(getUsersAndTasks());
+
+    // Add a new user
+    this.store.dispatch(addUser({userId: 20, userName: "Bill"}));
 
     // Increment the state update counter when the state changes.
     this.store
       .selectAsync(s => s)
       .pipe(skip(1))
-      .subscribe(() =>
-        this._stateUpdateCount.next(this._stateUpdateCount.value + 1)
-      );
+      .subscribe(s => {
+        console.log("State update:", s);
+        this._stateUpdateCount.next(this._stateUpdateCount.value + 1);
+      });
   }
 }
