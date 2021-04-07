@@ -1,11 +1,5 @@
 import { Injectable } from "@angular/core";
-import {
-  asapScheduler,
-  asyncScheduler,
-  BehaviorSubject,
-  Observable,
-  scheduled
-} from "rxjs";
+import { asapScheduler, BehaviorSubject, Observable, scheduled } from "rxjs";
 import { delay, map, take } from "rxjs/operators";
 import { AppState } from "../types/appState";
 import { Note } from "../types/note";
@@ -45,10 +39,6 @@ export class FakeBackendService {
     );
   }
 
-  getNotes() {
-    return this.toDelayedSingleEmitter(this.selectAsync(s => s.notes));
-  }
-
   addUser(user: User) {
     return this.addValue(s => s.users, "userId", user);
   }
@@ -71,6 +61,10 @@ export class FakeBackendService {
 
   removeTask(taskId: number) {
     return this.removeValue(s => s.tasks, s => s.taskId === taskId);
+  }
+
+  getNotes() {
+    return this.toDelayedSingleEmitter(this.selectAsync(s => s.notes));
   }
 
   addNote(note: Note) {

@@ -1,66 +1,65 @@
 import { Injectable } from "@angular/core";
 import { FakeBackendService } from "./fake-backend.service";
-import { StoreService } from "./store.service";
 import { UserTask } from "../types/userTask";
+import { withState } from "../basic-store/actionContext";
+import { AppState } from "../types/appState";
+
+// Create a handy context to easily create strongly-type reducer functions
+const context = withState<AppState>();
 
 @Injectable({ providedIn: "root" })
 export class TaskService {
-  constructor(
-    private store: StoreService,
-    private fakeBackend: FakeBackendService
-  ) {
-    // this.registerGetTasks();
-    // this.registerAddTask();
-    // this.registerUpdateTask();
-    // this.registerRemoveTask();
-    // this.registerMakeFakeTasks([
-    //   { taskId: 1, name: "Fake Task 1", difficulty: 20, progress: 0.4 },
-    //   { taskId: 1, name: "Fake Task 2", difficulty: 3, progress: 0.9 }
-    // ]);
-  }
+  constructor(private fakeBackend: FakeBackendService) {}
 
-  // private registerGetTasks() {
-  //   this.store.registerAction<UserTask[]>("getTasks", async getState => {
-  //     const tasks = await this.fakeBackend.getTasks().toPromise();
-  //     const s = getState();
+  addTaskAsync = context.createReducer(async (getState, task: UserTask) => {
+    // Fetch & await data from the fake API
+    const result = await this.fakeBackend.addTask(task).toPromise();
 
-  //     s.tasks = tasks;
-  //     return s;
-  //   });
-  // }
+    // Get the current state after awaiting
+    const state = getState();
 
-  // private registerMakeFakeTasks(fakeTasks: UserTask[] = []) {
-  //   this.store.registerAction("makeFakeTasks", getState => {
-  //     const s = getState();
+    if (result) {
+      state.tasks.push(task);
+    }
 
-  //     s.tasks = fakeTasks;
-  //     return s;
-  //   });
-  // }
+    return state;
+  });
 
-  // private registerAddTask() {
-  //   this.store.registerAction<UserTask>("addTask", (getState, task) => {
-  //     const s = getState();
+  updateTaskAsync = context.createReducer(
+    async (getState, payload: { taskId: number; task: UserTask }) => {
+      // Fetch & await data from the fake API
+      const result = await this.fakeBackend
+        .updateTask(payload.taskId, payload.task)
+        .toPromise();
 
-  //     s.tasks.push(task);
-  //     return s;
-  //   });
-  // }
+      // Get the current state after awaiting
+      const state = getState();
 
-  // private registerUpdateTask() {
-  //   this.store.registerAction("updateTask", (getState, task) => {
-  //     const s = getState();
-  //     const index = s.tasks.findIndex(task);
+      if (result) {
+        const foundIndex = state.tasks.findIndex(
+          t => t.taskId === payload.taskId
+        );
 
-  //     if (index > -1) {
-  //       s.tasks.splice(index, 1, task);
-  //     }
+        state.tasks.splice(foundIndex, 1, payload.task);
+      }
 
-  //     return s;
-  //   });
-  // }
+      return state;
+    }
+  );
 
-  // private registerRemoveTask() {
-  //   this.store.registerAction("removeTask");
-  // }
+  removeTaskAsync = context.createReducer(async (getState, taskId: number) => {
+    // Fetch & await data from the fake API
+    const result = await this.fakeBackend.removeTask(taskId).toPromise();
+
+    // Get the current state after awaiting
+    const state = getState();
+
+    if (result) {
+      const foundIndex = state.tasks.findIndex(t => t.taskId === taskId);
+
+      state.tasks.splice(foundIndex, 1);
+    }
+
+    return state;
+  });
 }

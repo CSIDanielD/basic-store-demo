@@ -1,71 +1,76 @@
 import { Injectable } from "@angular/core";
-import { AppState } from "../types/appState";
 import { withState } from "../basic-store/actionContext";
+import { AppState } from "../types/appState";
+import { User } from "../types/user";
 import { FakeBackendService } from "./fake-backend.service";
-import { Note } from "../types/note";
 
 // Create a handy context to easily create strongly-type reducer functions
 const context = withState<AppState>();
 
 @Injectable({ providedIn: "root" })
-export class NoteService {
+export class UserService {
   constructor(private fakeBackend: FakeBackendService) {}
 
-  getNotesAsync = context.createReducer(async getState => {
+  getUsersAndTasksAsync = context.createReducer(async getState => {
     // Fetch & await data from the fake API
-    const notes = await this.fakeBackend.getNotes().toPromise();
+    const usersAndTasks = await this.fakeBackend.getUsersAndTasks().toPromise();
 
     // Get the current state after awaiting
     const state = getState();
-    state.notes = notes;
+
+    state.users = usersAndTasks.users;
+    state.tasks = usersAndTasks.tasks;
+
     return state;
   });
 
-  addNoteAsync = context.createReducer(async (getState, note: Note) => {
+  addUserAsync = context.createReducer(async (getState, user: User) => {
     // Fetch & await data from the fake API
-    const result = await this.fakeBackend.addNote(note).toPromise();
+    const result = await this.fakeBackend.addUser(user).toPromise();
 
     // Get the current state after awaiting
     const state = getState();
 
     if (result) {
-      state.notes.push(note);
+      state.users.push(user);
     }
 
     return state;
   });
 
-  updateNoteAsync = context.createReducer(
-    async (getState, payload: { noteId: number; note: Note }) => {
+  updateUserAsync = context.createReducer(
+    async (getState, payload: { userId: number; user: User }) => {
       // Fetch & await data from the fake API
       const result = await this.fakeBackend
-        .updateNote(payload.noteId, payload.note)
+        .updateUser(payload.userId, payload.user)
         .toPromise();
 
       // Get the current state after awaiting
       const state = getState();
 
       if (result) {
-        const foundIndex = state.notes.findIndex(
-          n => n.noteId == payload.noteId
+        const foundIndex = state.users.findIndex(
+          u => u.userId === payload.userId
         );
-        state.notes.splice(foundIndex, 1, payload.note); // Replace the note in the state with the new one.
+
+        state.users.splice(foundIndex, 1, payload.user);
       }
 
       return state;
     }
   );
 
-  removeNoteAsync = context.createReducer(async (getState, noteId: number) => {
+  removeUserAsync = context.createReducer(async (getState, userId: number) => {
     // Fetch & await data from the fake API
-    const result = await this.fakeBackend.removeNote(noteId).toPromise();
+    const result = await this.fakeBackend.removeUser(userId).toPromise();
 
     // Get the current state after awaiting
     const state = getState();
 
     if (result) {
-      const foundIndex = state.notes.findIndex(n => n.noteId == noteId);
-      state.notes.splice(foundIndex, 1); // Delete the found note.
+      const foundIndex = state.users.findIndex(u => u.userId === userId);
+
+      state.users.splice(foundIndex, 1);
     }
 
     return state;
