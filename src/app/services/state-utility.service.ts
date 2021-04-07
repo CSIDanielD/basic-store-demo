@@ -11,7 +11,7 @@ export class StateUtilityService {
   constructor() {}
 
   // TODO: Fix createReducer returning 'any' if payload arg isn't provided.
-  resetState = context.createReducer(getState => {
+  resetState = context.createReducer((getState, a) => {
     return { ...defaultState };
   });
 }

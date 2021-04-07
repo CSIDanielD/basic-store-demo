@@ -64,6 +64,9 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    const { addUserAsync } = this.store.actions;
+    const addUserAction = addUserAsync({ userId: 1, userName: "Bob" });
+    this.store.dispatch(addUserAction);
     // this.store.dispatchAction("getTasks"); // Async, will update state second.
     // this.store.dispatchAction("makeFakeTasks"); // Synchronous, will update state first.
     // this.store.dispatchAction(new GetNotesAction()); // Async, will update state third.
